@@ -103,8 +103,8 @@ int main(int argc, char* argv[])
       read(nClientSocket,length,1);
       printf("length: %s\n",length );
        int size=length[1] - '0';
-
-      char nick[size];
+       // hahahahaha
+      char nick[5];
       char pass[5];
       read(nClientSocket,nick,sizeof(nick));
       printf("[nick]: %s\n",nick,5 );
