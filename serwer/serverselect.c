@@ -9,7 +9,11 @@
 
 #define SERVER_PORT 1234
 #define QUEUE_SIZE 5
-#define SERVER_IP 192.168.0.12
+
+struct user{
+  char nick[20];
+  char pass[20]
+};
 
 int main(int argc, char* argv[])
 {
@@ -20,11 +24,15 @@ int main(int argc, char* argv[])
    static struct timeval tTimeout;
    fd_set fsMask, fsRmask, fsWmask;
    char buf[]="Zuzanna Sawala\n";
-   char wiadomosc[6];
+   char wiadomosc[5];
+  //  char nick[5];
+  //  char pass[5];
+  //  char test[20];
+    char length[2];
    /* address structure */
    memset(&stAddr, 0, sizeof(struct sockaddr));
    stAddr.sin_family = AF_INET;
-   stAddr.sin_addr.s_addr = htonl(SERVER_IP);
+   stAddr.sin_addr.s_addr = INADDR_ANY;
    stAddr.sin_port = htons(SERVER_PORT);
 
    /* create a socket */
@@ -87,7 +95,27 @@ int main(int argc, char* argv[])
                 printf("%s: [connection from %s]\n", argv[0],
                        inet_ntoa((struct in_addr)stClientAddr.sin_addr));
                 FD_SET(nClientSocket, &fsMask);
-		read(nClientSocket,wiadomosc,6);
+    printf("wysyla\n" );
+		read(nClientSocket,wiadomosc,sizeof(wiadomosc));
+    printf("%s\n",wiadomosc,5 );
+    if(!strncmp("login",wiadomosc),5){
+      printf("jest\n" );
+      read(nClientSocket,length,1);
+      printf("length: %s\n",length );
+       int size=length[1] - '0';
+
+      char nick[size];
+      char pass[5];
+      read(nClientSocket,nick,sizeof(nick));
+      printf("[nick]: %s\n",nick,5 );
+      read(nClientSocket,pass,sizeof(pass));
+      printf("[password]: %s\n",pass,5 );
+      //
+      // read(nClientSocket,pass,5);
+      // printf("[nick]: %s\n",nick,5 );
+      // printf("[password]: %s\n",pass,5 );
+     }
+
                 if (nClientSocket > nMaxfd) nMaxfd = nClientSocket;
        }
        for (nFd = 0; nFd <= nMaxfd; nFd++)
@@ -97,9 +125,9 @@ int main(int argc, char* argv[])
                         printf("%s: [sending string to %s]\n", argv[0],
                                inet_ntoa((struct in_addr)stClientAddr.sin_addr));
 		if(nFd==nClientSocket){
-			if(!strncmp("117217",wiadomosc,6)){
-			write(nFd,"Zuzanna Sawala",15);
-		}
+		// 	if(!strncmp("117217",wiadomosc,6)){
+		// 	write(nFd,"Zuzanna Sawala",15);
+		// }
 		}
                         FD_CLR(nFd, &fsMask);
                         close(nFd);

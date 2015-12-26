@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
 	int fd=socket(PF_INET,SOCK_STREAM,0);
 	struct sockaddr_in sa;
 	// w kliencie socket to jest socket servera tak w praktyce
-	
+
 	sa.sin_family=PF_INET;
 	sa.sin_port=htons(1234);
 	// addrent=gethostbyname(argv[1]);
@@ -26,8 +26,7 @@ int main(int argc, char* argv[]){
 	printf("polaczylo\n");
 	char buf[300];
 	connect(fd,(struct sockaddr*)&sa,sizeof(sa));
-	printf("%s%d",argv[1],sizeof(argv[1]));
-	write(fd,argv[1],sizeof(argv[1]));
+	write(fd,"117217\n",7);
 	int n=read(fd,buf,sizeof(buf));
 	buf[n]='\0';
 	write(1,buf,n);

@@ -14,14 +14,19 @@ void* cthread(void* arg){
 	struct cln* c=(struct cln*) arg;
 	printf("new connection: %s\n",inet_ntoa((struct in_addr)c->caddr.sin_addr));
 	char buf[]="Zuzanna Sawala\n";
-	char wiadomosc[300];
+	char wiadomosc[6];
+	while(1){
 	read(c->cfd,wiadomosc,sizeof(wiadomosc));
-	if(!strncmp("117217",wiadomosc,6))
-		write(c->cfd,buf,sizeof(buf));
-	else {char buf[]="BLAD - to nie autor\n"; write(c->cfd,buf,sizeof(buf));};
-		close(c->cfd);
-	close(c->cfd);
-	free(c);
+	 write(1,wiadomosc,6);
+}
+	//
+	// if(!strncmp("117217",wiadomosc,6))
+	// 	write(c->cfd,buf,sizeof(buf));
+	// 	printf("wyslalao\n" );
+	// else {char buf[]="BLAD - to nie autor\n"; write(c->cfd,buf,sizeof(buf));};
+	// 	close(c->cfd);
+	// close(c->cfd);
+	// free(c);
 }
 int main(){
 	pthread_t tid;
