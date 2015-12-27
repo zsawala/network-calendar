@@ -25,6 +25,7 @@ int main(int argc, char* argv[])
    fd_set fsMask, fsRmask, fsWmask;
    char buf[]="Zuzanna Sawala\n";
    char wiadomosc[5];
+   char tekst[30];
   //  char nick[5];
   //  char pass[5];
   //  char test[20];
@@ -98,22 +99,33 @@ int main(int argc, char* argv[])
     printf("wysyla\n" );
 		read(nClientSocket,wiadomosc,sizeof(wiadomosc));
     printf("%s\n",wiadomosc,5 );
+     read(nClientSocket,tekst,sizeof(tekst)); //jedno zczytanie całej wiadomosci
+    // printf("%s\n",tekst );
+    //podział wiadomosci na interesujace mnie czesci
     if(!strncmp("login",wiadomosc),5){
+      int c=0;
+      char nick[10];
+      char pass[10];
+        int i=0;
+       while(c<2){
       printf("jest\n" );
-      read(nClientSocket,length,1);
-      printf("length: %s\n",length );
-       int size=length[1] - '0';
-       // hahahahaha
-      char nick[5];
-      char pass[5];
-      read(nClientSocket,nick,sizeof(nick));
-      printf("[nick]: %s\n",nick,5 );
-      read(nClientSocket,pass,sizeof(pass));
-      printf("[password]: %s\n",pass,5 );
-      //
-      // read(nClientSocket,pass,5);
-      // printf("[nick]: %s\n",nick,5 );
-      // printf("[password]: %s\n",pass,5 );
+      int w=0;
+        while(tekst[i]!='\n'){
+          if(c==0){
+      nick[w]=tekst[i];
+    }
+    if(c==1){
+      pass[w]=tekst[i];
+    }
+  i=i+1;
+  w=w+1;
+    }
+    w=0;
+    i=i+1;
+    c=c+1;
+  }
+    printf("%s\n",nick );
+    printf("%s\n", pass );
      }
 
                 if (nClientSocket > nMaxfd) nMaxfd = nClientSocket;
