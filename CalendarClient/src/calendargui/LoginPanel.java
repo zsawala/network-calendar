@@ -1,6 +1,7 @@
 
 package calendargui;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,7 +23,9 @@ public class LoginPanel extends JPanel{
     JTextField nickField;
     JTextField passField;
     JButton acceptButton;
-    public LoginPanel(DataOutputStream out,DataInputStream in ){
+    static int bitsCount;
+    static byte[] message = new byte[4];
+    public LoginPanel(DataOutputStream out,DataInputStream in,CardLayout cardLayout, JPanel cardPanel){
         setLayout(null);
         title = new JLabel("CALENDAR");
         nick = new JLabel("NICK:");
@@ -47,11 +51,19 @@ public class LoginPanel extends JPanel{
         acceptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              
                 try {
                     out.write("login".getBytes());  
-                    out.write((Integer.toString(5)+nickField.getText()).getBytes());
-                    out.write((passField.getText()).getBytes());
+                    out.write((nickField.getText()+"\n").getBytes());
+                    out.write((passField.getText()+"\n").getBytes());
+                    bitsCount = in.read(message);
+                    String mess = new String(message);
+                    System.out.print(mess);
+                    System.out.print(mess);
+                    if (mess.equals("true")){
+                        System.out.println("weszlo");
+                        cardLayout.show(cardPanel,"2");
+
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }

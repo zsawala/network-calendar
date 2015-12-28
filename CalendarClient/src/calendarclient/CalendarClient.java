@@ -1,7 +1,9 @@
 
 package calendarclient;
 
+import calendargui.CalendarPanel;
 import calendargui.LoginPanel;
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
@@ -39,16 +41,6 @@ public class CalendarClient {
          out = new DataOutputStream(outToServer);
          InputStream inFromServer = client.getInputStream();
          in = new DataInputStream(inFromServer);
-//         System.out.println("Odbieranie");
-//         System.out.println("Server says " + in.readUTF());
-//         bitsCount = in.read(message);
-////         while(!end){
-////             
-////         }
-//         wynik.setText(new String(message));
-//         while(true){
-//            out.write("blabla".getBytes()); 
-//         } 
       }catch(IOException c)
       {
          c.printStackTrace();
@@ -57,28 +49,19 @@ public class CalendarClient {
           //GUI
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-        frame.setSize(500,500);
-        LoginPanel panel = new LoginPanel(out,in);
-        frame.add(panel);
+        frame.setSize(1000,750);
+
+        CardLayout cardLay = new CardLayout();
+        JPanel cardPanel = new JPanel();
+        LoginPanel loginPanel = new LoginPanel(out,in,cardLay,cardPanel);
+        CalendarPanel calendar = new CalendarPanel();
+        cardPanel.setLayout(cardLay);
+        cardPanel.add(loginPanel,"1");
+        cardPanel.add(calendar,"2");
+        cardLay.show(cardPanel,"1");
+        frame.add(cardPanel);
+        
         frame.setVisible(true);
-//        JPanel panel = new JPanel();
-//        frame.add(panel);
-//        JLabel label = new JLabel("Wpisz indeks");
-//        panel.add(label);
-//        JTextField text = new JTextField("",10);
-//        panel.add(text);
-//        JButton button = new JButton("Button");
-//        panel.add(button);
-//        frame.setVisible(true);
-//        panel.setVisible(true);
-//        JLabel wynik = new JLabel();
-//        panel.add(wynik);
-//        button.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//              wynik.setText("hahahahaah");
-//            }
-//        });
        
     }
 
