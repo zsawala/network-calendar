@@ -49,7 +49,7 @@ public class CalendarClient {
           //GUI
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-        frame.setSize(1000,750);
+        frame.setSize(1050,750);
 
         CardLayout cardLay = new CardLayout();
         JPanel cardPanel = new JPanel();
