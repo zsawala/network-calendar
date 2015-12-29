@@ -6,6 +6,8 @@ import calendargui.LoginPanel;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,14 +30,18 @@ public class CalendarClient {
     static int port = Integer.parseInt("1234");
     static byte[] message = new byte[15];
     static int bitsCount; //liczba zwroconych bitow
-    static DataOutputStream out;
-    static DataInputStream in;
+    static public DataOutputStream out;
+    static public DataInputStream in;
+    static JFrame frame;
+    
+  
+    
     public static void main(String[] args) {
         
         //POŁĄCZENIE
           try
       {
-         InetAddress addr = InetAddress.getByName("192.168.0.12");
+         InetAddress addr = InetAddress.getByName("192.168.0.15");
          System.out.println("Connecting to " + addr + " on port "+  port);
          Socket client = new Socket(addr, port);
          System.out.println("Just connected to " + client.getRemoteSocketAddress());
@@ -47,7 +55,7 @@ public class CalendarClient {
       }
         
           //GUI
-        JFrame frame = new JFrame();
+       frame = new JFrame();
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setSize(1050,750);
 
@@ -62,12 +70,32 @@ public class CalendarClient {
         frame.add(cardPanel);
         
         frame.setVisible(true);
+        frame.addWindowListener(new WindowAdapter()
+            {
+                 DataOutputStream wyjscie = out; 
+            public void windowClosing(WindowEvent e)
+                {
+                 
+                try {
+                    System.out.println("weszlo");
+                    InetAddress addr = InetAddress.getByName("192.168.0.15");
+         System.out.println("Connecting to " + addr + " on port "+  port);
+         Socket client = new Socket(addr, port);
+         System.out.println("Just connected to " + client.getRemoteSocketAddress());
+         OutputStream outToServer = client.getOutputStream();
+         out = new DataOutputStream(outToServer);
+                    out.write("exity".getBytes());
+                } catch (IOException c) {
+                   c.printStackTrace();
+                }
+                   
+                }
+            });
+        
        
     }
-
-    public CalendarClient() throws UnknownHostException {
-        
-        
-    }
+    
+    
+    
     
 }
